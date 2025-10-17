@@ -1,0 +1,91 @@
+name: Laravel GitOps CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, fileinfo
+          coverage: none
+
+      - name: Install Dependencies
+        run: |
+          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Set up SQLite
+        run: |
+          touch database/database.sqlite
+          php artisan migrate --env=testing --force
+
+      - name: Execute tests
+        run: php artisan test
+
+  deploy:
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, fileinfo
+          
+      - name: Deploy Application
+        run: |
+          # Install dependencies
+          composer install --no-dev --optimize-autoloader
+          
+          # Create deploy directory
+          mkdir -p deploy
+          
+          # Copy files to deploy directory (exclude unnecessary files)
+          rsync -av --exclude='.git' \
+                --exclude='.github' \
+                --exclude='node_modules' \
+                --exclude='tests' \
+                --exclude='.editorconfig' \
+                --exclude='.env.example' \
+                --exclude='.gitattributes' \
+                --exclude='.gitignore' \
+                --exclude='phpunit.xml' \
+                --exclude='README.md' \
+                --exclude='deploy' \
+                . deploy/
+                
+          # Set up environment
+          cd deploy
+          cp .env .env.production
+          sed -i 's/APP_ENV=local/APP_ENV=production/' .env.production
+          sed -i 's/APP_DEBUG=true/APP_DEBUG=false/' .env.production
+          
+          # Set up storage and cache directories
+          mkdir -p storage/framework/{sessions,views,cache}
+          chmod -R 777 storage bootstrap/cache
+          
+          # Generate application key
+          php artisan key:generate --force
+          
+          # Optimize the application
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
+          
+          echo "Deployment to ./deploy completed successfully!"
