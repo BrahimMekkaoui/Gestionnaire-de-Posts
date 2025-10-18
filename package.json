@@ -9,7 +9,7 @@
         "dev": "vite",
         "build": "vite build",
         "preview": "vite preview",
-        "lint": "eslint -c .eslintrc.cjs --ext .js,.vue resources/js",
+        "lint": "eslint --no-eslintrc -c .eslintrc.cjs --ext .js,.vue resources/js",
         "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
         "analyze": "vite-bundle-analyzer",
         "test": "vitest",
