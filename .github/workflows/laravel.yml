@@ -32,6 +32,11 @@ jobs:
         extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_mysql, pdo_sqlite, bcmath, ctype, fileinfo, json, tokenizer, xml, intl
         coverage: none
 
+    - name: PHP diagnostics
+      run: |
+        php -v
+        php -m | sort
+
     - name: Cache Composer dependencies
       uses: actions/cache@v4
       with:
