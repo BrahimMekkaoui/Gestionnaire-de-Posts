@@ -1,0 +1,152 @@
+name: Laravel CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  laravel-tests:
+    runs-on: ubuntu-latest
+    
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: test_db
+          MYSQL_USER: user
+          MYSQL_PASSWORD: password
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping -h 127.0.0.1 -uuser -ppassword" --health-interval=10s --health-timeout=5s --health-retries=5
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_mysql, pdo_sqlite, bcmath, ctype, fileinfo, json, tokenizer, xml
+        coverage: none
+
+    - name: Cache Composer dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.composer/cache/files
+          vendor
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-composer-
+
+    - name: Install Dependencies
+      run: |
+        composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        cp .env.example .env
+        php artisan key:generate
+
+    - name: Run PHPStan
+      run: |
+        vendor/bin/phpstan analyse --no-progress
+
+    - name: Run Pint (dry-run)
+      run: |
+        vendor/bin/pint -v --test
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+    
+    - name: Install NPM dependencies
+      run: npm ci
+    
+    - name: Lint frontend (ESLint)
+      run: npm run lint
+
+    - name: Build assets
+      run: npm run build
+    
+    - name: Execute tests
+      env:
+        DB_CONNECTION: mysql
+        DB_DATABASE: test_db
+        DB_USERNAME: user
+        DB_PASSWORD: password
+        DB_HOST: 127.0.0.1
+        DB_PORT: 3306
+      run: |
+        php artisan config:clear
+        php artisan migrate:fresh --seed --force
+        composer test
+
+    - name: Upload coverage report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: phpunit-coverage
+        path: coverage
+        if-no-files-found: ignore
+
+    - name: Upload JUnit report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: phpunit-junit
+        path: junit.xml
+        if-no-files-found: ignore
+
+  deploy:
+    needs: laravel-tests
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_mysql, pdo_sqlite, bcmath, ctype, fileinfo, json, tokenizer, xml
+    
+    - name: Install Dependencies
+      run: |
+        composer install --no-dev --optimize-autoloader
+        cp .env.example .env
+        php artisan key:generate
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+    
+    - name: Install NPM dependencies
+      run: npm ci --production
+    
+    - name: Build assets
+      run: npm run build
+    
+    - name: Upload to server
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        source: "*"
+        target: /var/www/gestionnaire-posts
+        strip_components: 1
+    
+    - name: Run deployment script
+      run: |
+        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'cd /var/www/gestionnaire-posts && \
+          php artisan config:cache && \
+          php artisan route:cache && \
+          php artisan view:cache && \
+          php artisan migrate --force && \
+          php artisan storage:link'

@@ -3,32 +3,229 @@
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="vendor/autoload.php"
          colors="true"
->
+         verbose="true"
+         stopOnError="false"
+         stopOnFailure="false"
+         stopOnIncomplete="false"
+         stopOnSkipped="false"
+         stopOnRisky="false"
+         failOnWarning="true"
+         failOnRisky="true"
+         beStrictAboutOutputDuringTests="true"
+         beStrictAboutTodoAnnotatedTests="true"
+         convertDeprecationsToExceptions="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnDefect="false"
+         executionOrder="random"
+         cacheResult="true"
+         cacheResultFile=".phpunit.cache/test-results"
+         executionOrderDefects="depends,global"
+         beStrictAboutTestsThatDoNotTestAnything="true"
+         beStrictAboutCoversAnnotation="true"
+         beStrictAboutResourceUsageDuringSmallTests="true"
+         beStrictAboutTodoAnnotatedTests="true"
+         defaultTimeLimit="30"
+         timeoutForSmallTests="1"
+         timeoutForMediumTests="10"
+         timeoutForLargeTests="60"
+         verbose="true">
+
     <testsuites>
         <testsuite name="Unit">
-            <directory>tests/Unit</directory>
+            <directory suffix="Test.php">./tests/Unit</directory>
         </testsuite>
         <testsuite name="Feature">
-            <directory>tests/Feature</directory>
+            <directory suffix="Test.php">./tests/Feature</directory>
+        </testsuite>
+        <testsuite name="Integration">
+            <directory suffix="Test.php">./tests/Integration</directory>
         </testsuite>
     </testsuites>
+
+    <coverage processUncoveredFiles="true"
+              includeUncoveredFiles="true"
+              cacheDirectory=".phpunit.cache/coverage"
+              pathCoverage="false">
+        <include>
+            <directory suffix=".php">./app</directory>
+            <directory suffix=".php">./config</directory>
+            <directory suffix=".php">./database/factories</directory>
+            <directory suffix=".php">./database/seeders</directory>
+            <directory suffix=".php">./routes</directory>
+        </include>
+        <exclude>
+            <directory suffix=".php">./bootstrap</directory>
+            <directory suffix=".php">./config</directory>
+            <directory suffix=".php">./database</directory>
+            <directory suffix=".php">./node_modules</directory>
+            <directory suffix=".php">./public</directory>
+            <directory suffix=".php">./resources</directory>
+            <directory suffix=".php">./storage</directory>
+            <directory suffix=".php">./tests</directory>
+            <directory suffix=".php">./vendor</directory>
+            <file>./routes/console.php</file>
+            <file>./routes/channels.php</file>
+        </exclude>
+        <report>
+            <html outputDirectory="build/coverage" lowUpperBound="50" highLowerBound="90"/>
+            <text outputFile="build/coverage.txt" showUncoveredFiles="true" showOnlySummary="true"/>
+            <clover outputFile="build/logs/clover.xml"/>
+            <crap4j outputFile="build/logs/crap4j.xml"/>
+            <php outputFile="build/coverage/coverage.serialized"/>
+            <xml outputDirectory="build/coverage"/>
+        </report>
+    </coverage>
+
     <source>
         <include>
-            <directory>app</directory>
+            <directory>./app</directory>
+            <directory>./config</directory>
+            <directory>./database/factories</directory>
+            <directory>./database/seeders</directory>
+            <directory>./routes</directory>
         </include>
     </source>
+
+    <logging>
+        <log type="coverage-html" target="build/coverage" lowUpperBound="35" highLowerBound="70"/>
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
+        <log type="coverage-crap4j" target="build/logs/crap4j.xml"/>
+        <log type="junit" target="build/report.junit.xml"/>
+        <log type="testdox-html" target="build/report.html"/>
+        <log type="testdox-text" target="build/report.txt"/>
+        <log type="testdox-xml" target="build/testdox.xml"/>
+    </logging>
+
     <php>
+        <!-- Environment -->
+        <env name="APP_NAME" value="Gestionnaire de Posts"/>
         <env name="APP_ENV" value="testing"/>
-        <env name="APP_MAINTENANCE_DRIVER" value="file"/>
-        <env name="BCRYPT_ROUNDS" value="4"/>
-        <env name="CACHE_STORE" value="array"/>
+        <env name="APP_DEBUG" value="true"/>
+        <env name="APP_KEY" value="base64:r0w0xC+mYYqjbZhHZ3uk0oGkMpmCwR4tQb7p+J5E8rI="/>
+        <env name="APP_URL" value="http://localhost"/>
+
+        <!-- Database -->
         <env name="DB_CONNECTION" value="sqlite"/>
         <env name="DB_DATABASE" value=":memory:"/>
-        <env name="MAIL_MAILER" value="array"/>
-        <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>
-        <env name="PULSE_ENABLED" value="false"/>
+        <env name="QUEUE_CONNECTION" value="sync"/>
+
+        <!-- Cache -->
+        <env name="CACHE_DRIVER" value="array"/>
+        <env name="CACHE_PREFIX" value="laravel_test"/>
+
+        <!-- Mail -->
+        <env name="MAIL_MAILER" value="array"/>
+        <env name="MAIL_FROM_ADDRESS" value="test@example.com"/>
+        <env name="MAIL_FROM_NAME" value="Gestionnaire de Posts"/>
+
+        <!-- Filesystem -->
+        <env name="FILESYSTEM_DISK" value="local"/>
+
+        <!-- Services -->
+        <env name="AWS_ACCESS_KEY_ID" value=""/>
+        <env name="AWS_SECRET_ACCESS_KEY" value=""/>
+        <env name="AWS_DEFAULT_REGION" value="us-east-1"/>
+        <env name="AWS_BUCKET" value=""/>
+        <env name="AWS_USE_PATH_STYLE_ENDPOINT" value="false"/>
+
+        <!-- Broadcasting -->
+        <env name="BROADCAST_DRIVER" value="log"/>
+        <env name="LOG_CHANNEL" value="stack"/>
+
+        <!-- Debug -->
+        <env name="DEBUGBAR_ENABLED" value="false"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
+        <env name="SCOUT_DRIVER" value="null"/>
+        <env name="SESSION_DRIVER" value="array"/>
+        <env name="QUEUE_CONNECTION" value="sync"/>
+        <env name="PULSE_ENABLED" value="false"/>
         <env name="NIGHTWATCH_ENABLED" value="false"/>
+
+        <!-- Security -->
+        <env name="BCRYPT_ROUNDS" value="4"/>
+        <env name="HASH_DRIVER" value="bcrypt"/>
+        <env name="SANCTUM_STATEFUL_DOMAINS" value="localhost"/>
+        <env name="SESSION_DOMAIN" value=""/>
+        <env name="SESSION_SECURE_COOKIE" value="false"/>
+        <env name="SANCTUM_STATEFUL_DOMAINS" value="localhost,localhost:3000,127.0.0.1,127.0.0.1:8000,::1"/>
+        <env name="SESSION_DRIVER" value="array"/>
+        <env name="SESSION_LIFETIME" value="120"/>
     </php>
+
+    <extensions>
+        <extension class="PHPUnit\Extension\PharExtension"/>
+        <extension class="PHPUnit\Extension\PhpCacheDirectory">
+            <var name="directory" value=".phpunit.cache"/>
+        </extension>
+    </extensions>
+
+    <listeners>
+        <listener class="PHPUnit\Util\Log\TeamCity"/>
+        <listener class="PHPUnit\Util\Log\JUnit">
+            <arguments>
+                <string>build/junit.xml</string>
+            </arguments>
+        </listener>
+        <listener class="PHPUnit\Util\Log\TeamCity">
+            <arguments>
+                <string>build/teamcity.xml</string>
+            </arguments>
+        </listener>
+        <listener class="PHPUnit\Util\Log\TestDox\Html">
+            <arguments>
+                <string>build/testdox.html</string>
+            </arguments>
+        </listener>
+        <listener class="PHPUnit\Util\Log\TestDox\Text">
+            <arguments>
+                <string>build/testdox.txt</string>
+            </arguments>
+        </listener>
+        <listener class="PHPUnit\Util\Log\TestDox\Xml">
+            <arguments>
+                <string>build/testdox.xml</string>
+            </arguments>
+        </listener>
+    </listeners>
+
+    <testdox>
+        <groups>
+            <include>
+                <group>default</group>
+            </include>
+        </groups>
+    </testdox>
+
+    <warnings>
+        <warning>deprecation</warning>
+        <warning>notice</warning>
+        <warning>php</warning>
+    </warnings>
+
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./app</directory>
+            <directory suffix=".php">./config</directory>
+            <directory suffix=".php">./database/factories</directory>
+            <directory suffix=".php">./database/seeders</directory>
+            <directory suffix=".php">./routes</directory>
+            <exclude>
+                <directory suffix=".php">./bootstrap</directory>
+                <directory suffix=".php">./config</directory>
+                <directory suffix=".php">./database</directory>
+                <directory suffix=".php">./node_modules</directory>
+                <directory suffix=".php">./public</directory>
+                <directory suffix=".php">./resources</directory>
+                <directory suffix=".php">./storage</directory>
+                <directory suffix=".php">./tests</directory>
+                <directory suffix=".php">./vendor</directory>
+                <file>./routes/console.php</file>
+                <file>./routes/channels.php</file>
+            </exclude>
+        </whitelist>
+    </filter>
 </phpunit>

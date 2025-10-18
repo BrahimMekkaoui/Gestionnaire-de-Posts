@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<ruleset name="Gestionnaire de Posts">
+    <description>PHP_CodeSniffer configuration for Gestionnaire de Posts project</description>
+
+    <!-- Base paths -->
+    <file>app</file>
+    <file>config</file>
+    <file>database</file>
+    <file>routes</file>
+    <file>tests</file>
+
+    <!-- Exclude directories -->
+    <exclude-pattern>*/_ide_helper.php</exclude-pattern>
+    <exclude-pattern>*/_ide_helper_models.php</exclude-pattern>
+    <exclude-pattern>*/_ide_helper_proxies.php</exclude-pattern>
+    <exclude-pattern>*/_ide_helper_*.php</exclude-pattern>
+    <exclude-pattern>*/_ide_helper</exclude-pattern>
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*/node_modules/*</exclude-pattern>
+    <exclude-pattern>*/storage/*</exclude-pattern>
+    <exclude-pattern>*/bootstrap/cache/*</exclude-pattern>
+    <exclude-pattern>*/public/*</exclude-pattern>
+
+    <!-- PSR-12 as a base -->
+    <rule ref="PSR12">
+        <exclude name="PSR1.Methods.CamelCapsMethodName.NotCamelCaps"/>
+        <exclude name="PSR12.Properties.ConstantVisibility.NotFound"/>
+    </rule>
+
+    <!-- Additional rules -->
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="120"/>
+            <property name="absoluteLineLimit" value="120"/>
+        </properties>
+    </rule>
+
+    <rule ref="Generic.Files.LineEndings">
+        <properties>
+            <property name="eolChar" value="\n"/>
+        </properties>
+    </rule>
+
+    <rule ref="Generic.PHP.DisallowShortOpenTag">
+        <exclude-pattern>*.blade.php</exclude-pattern>
+    </rule>
+
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace">
+        <properties>
+            <property name="ignoreBlankLines" value="false"/>
+        </properties>
+    </rule>
+
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.StartFile">
+        <severity>0</severity>
+    </rule>
+
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EndFile">
+        <severity>0</severity>
+    </rule>
+
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EmptyLines">
+        <severity>0</severity>
+    </rule>
+
+    <!-- PHP version -->
+    <config name="testVersion" value="8.2-"/>
+
+    <!-- Display progress -->
+    <arg value="p"/>
+
+    <!-- Colors in output -->
+    <arg name="colors"/>
+
+    <!-- Show sniff codes in all reports -->
+    <arg value="s"/>
+
+    <!-- Show sniff and source in report -->
+    <arg value="v"/>
+
+    <!-- Show warnings in report -->
+    <arg value="w"/>
+
+    <!-- Show the names of the files being checked -->
+    <arg value="v"/>
+
+    <!-- Show sniff source code -->
+    <arg value="s"/>
+
+    <!-- Report width -->
+    <arg name="report-width" value="120"/>
+
+    <!-- Report format -->
+    <arg name="report" value="full"/>
+    <arg name="report" value="summary"/>
+    <arg name="report" value="source"/>
+    <arg name="report" value="info"/>
+    <arg name="report" value="diff"/>
+    <arg name="report" value="emacs"/>
+    <arg name="report" value="checkstyle"/>
+    <arg name="report" value="json"/>
+    <arg name="report" value="junit"/>
+    <arg name="report" value="csv"/>
+    <arg name="report" value="xml"/>
+    <arg name="report" value="notifysend"/>
+    <arg name="report" value="github"/>
+    <arg name="report" value="gitlab"/>
+    <arg name="report" value="squizlabs"/>
+    <arg name="report" value="summary"/>
+    <arg name="report" value="code"/>
+</ruleset>

@@ -1,0 +1,30 @@
+includes:
+    - vendor/nunomaduro/larastan/extension.neon
+
+parameters:
+    level: 8
+    paths:
+        - app
+        - config
+        - database
+        - routes
+        - tests/Unit
+        - tests/Feature
+
+    excludePaths:
+        - storage/*
+        - vendor/*
+        - node_modules/*
+        - public/*
+        - bootstrap/cache/*
+
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+    checkMissingCallableSignature: false
+
+    ignoreErrors:
+        - '#Access to an undefined property [a-zA-Z0-9_\\]+::\$[a-zA-Z0-9_]+#'
+        - '#Call to an undefined method [a-zA-Z0-9_\\]+::[a-zA-Z0-9_]+()#'
+        - '#Method [a-zA-Z0-9_\\]+::[a-zA-Z0-9_]+() has no return typehint specified.#'
+        - '#Parameter \#[a-zA-Z0-9_\\]+\$[a-zA-Z0-9_]+ of method [a-zA-Z0-9_\\]+::[a-zA-Z0-9_]+\(\) has no typehint specified.#'
+        - '#Method [a-zA-Z0-9_\\]+::[a-zA-Z0-9_]+\(\) has parameter [a-zA-Z0-9_\\]+\$[a-zA-Z0-9_]+ with no typehint specified.#'

@@ -1,0 +1,30 @@
+{
+  "semi": true,
+  "singleQuote": true,
+  "tabWidth": 4,
+  "trailingComma": "es5",
+  "printWidth": 100,
+  "endOfLine": "auto",
+  "bracketSpacing": true,
+  "arrowParens": "avoid",
+  "htmlWhitespaceSensitivity": "css",
+  "jsxSingleQuote": true,
+  "proseWrap": "preserve",
+  "quoteProps": "as-needed",
+  "useTabs": false,
+  "vueIndentScriptAndStyle": true,
+  "overrides": [
+    {
+      "files": "*.blade.php",
+      "options": {
+        "parser": "html"
+      }
+    },
+    {
+      "files": "*.php",
+      "options": {
+        "parser": "php"
+      }
+    }
+  ]
+}
