@@ -16,7 +16,7 @@ class PostTest extends TestCase
         // Arrange
         $postData = [
             'title' => 'Test Post',
-            'content' => 'This is a test post content.'
+            'content' => 'This is a test post content.',
         ];
 
         // Act
@@ -28,15 +28,14 @@ class PostTest extends TestCase
         $this->assertEquals('This is a test post content.', $post->content);
         $this->assertDatabaseHas('posts', [
             'title' => 'Test Post',
-            'content' => 'This is a test post content.'
+            'content' => 'This is a test post content.',
         ]);
     }
 
     /** @test */
     public function it_requires_title_and_content()
     {
-        $this->expectException('Illuminate\Database\QueryException');
-        
+        $this->expectException('Illuminate\\Database\\QueryException');
         // Try to create a post without required fields
         Post::create([]);
     }

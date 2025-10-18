@@ -13,6 +13,7 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::latest()->get();
+
         return view('posts.index', compact('posts'));
     }
 
@@ -37,7 +38,7 @@ class PostController extends Controller
         Post::create($validated);
 
         return redirect()->route('posts.index')
-                         ->with('success', 'Post créé avec succès.');
+            ->with('success', 'Post créé avec succès.');
     }
 
     /**
@@ -69,7 +70,7 @@ class PostController extends Controller
         $post->update($validated);
 
         return redirect()->route('posts.index')
-                         ->with('success', 'Post mis à jour avec succès');
+            ->with('success', 'Post mis à jour avec succès');
     }
 
     /**
@@ -80,6 +81,6 @@ class PostController extends Controller
         $post->delete();
 
         return redirect()->route('posts.index')
-                         ->with('success', 'Post supprimé avec succès');
+            ->with('success', 'Post supprimé avec succès');
     }
 }

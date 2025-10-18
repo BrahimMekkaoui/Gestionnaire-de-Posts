@@ -30,13 +30,13 @@ class PostTest extends TestCase
         // Faire une requête POST
         $response = $this->post('/posts', [
             'title' => 'Test Post',
-            'content' => 'This is a test post content.'
+            'content' => 'This is a test post content.',
         ]);
 
         // Vérifier que le post a été créé
         $this->assertDatabaseHas('posts', [
             'title' => 'Test Post',
-            'content' => 'This is a test post content.'
+            'content' => 'This is a test post content.',
         ]);
 
         // Vérifier la redirection
@@ -67,14 +67,14 @@ class PostTest extends TestCase
         // Faire une requête PUT
         $response = $this->put("/posts/{$post->id}", [
             'title' => 'Updated Title',
-            'content' => 'Updated content.'
+            'content' => 'Updated content.',
         ]);
 
         // Vérifier que le post a été mis à jour
         $this->assertDatabaseHas('posts', [
             'id' => $post->id,
             'title' => 'Updated Title',
-            'content' => 'Updated content.'
+            'content' => 'Updated content.',
         ]);
 
         // Vérifier la redirection
@@ -92,7 +92,7 @@ class PostTest extends TestCase
 
         // Vérifier que le post a été supprimé
         $this->assertDatabaseMissing('posts', [
-            'id' => $post->id
+            'id' => $post->id,
         ]);
 
         // Vérifier la redirection
@@ -118,7 +118,7 @@ class PostTest extends TestCase
         // Faire une requête POST
         $response = $this->post('/posts', [
             'title' => $longTitle,
-            'content' => 'Valid content'
+            'content' => 'Valid content',
         ]);
 
         // Vérifier que la validation a échoué
