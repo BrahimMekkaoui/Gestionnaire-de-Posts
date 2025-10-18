@@ -17,20 +17,26 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, fileinfo
+          extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, fileinfo, intl
           coverage: none
 
       - name: Cache Composer dependencies
         uses: actions/cache@v4
         with:
-          path: vendor
+          path: |
+            ~/.composer/cache/files
           key: ${{ runner.os }}-composer-v3-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-v3-
 
       - name: Install Dependencies
         run: |
-          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+          composer --version
+          composer diagnose || true
+          composer check-platform-reqs || true
+          # Try quiet first; if it fails, run verbose to expose errors
+          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist || \
+            (composer install --no-interaction --prefer-dist -vvv)
           cp .env.example .env
           php artisan key:generate
 
@@ -89,12 +95,15 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, fileinfo
+          extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, fileinfo, intl
           
       - name: Deploy Application
         run: |
           # Install dependencies
-          composer install --no-dev --optimize-autoloader
+          composer diagnose || true
+          composer check-platform-reqs || true
+          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --no-dev --optimize-autoloader || \
+            (composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader -vvv)
           
           # Create deploy directory
           mkdir -p deploy
