@@ -149,9 +149,14 @@ jobs:
         target: /var/www/gestionnaire-posts
         strip_components: 1
     
+    - name: Add host to known_hosts
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+
     - name: Run deployment script
       run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'cd /var/www/gestionnaire-posts && \
+        ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'cd /var/www/gestionnaire-posts && \
           php artisan config:cache && \
           php artisan route:cache && \
           php artisan view:cache && \
