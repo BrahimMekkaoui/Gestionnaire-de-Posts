@@ -4,13 +4,14 @@ namespace Tests\Feature;
 
 use App\Models\Post;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class PostTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_can_display_all_posts()
     {
         // Créer quelques posts
@@ -24,7 +25,7 @@ class PostTest extends TestCase
         $response->assertViewIs('posts.index');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_create_a_post()
     {
         // Faire une requête POST
@@ -43,7 +44,7 @@ class PostTest extends TestCase
         $response->assertRedirect('/posts');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_show_a_post()
     {
         // Créer un post
@@ -58,7 +59,7 @@ class PostTest extends TestCase
         $response->assertViewHas('post', $post);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_update_a_post()
     {
         // Créer un post
@@ -81,7 +82,7 @@ class PostTest extends TestCase
         $response->assertRedirect('/posts');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_delete_a_post()
     {
         // Créer un post
@@ -99,7 +100,7 @@ class PostTest extends TestCase
         $response->assertRedirect('/posts');
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_required_fields()
     {
         // Faire une requête POST sans données
@@ -109,7 +110,7 @@ class PostTest extends TestCase
         $response->assertSessionHasErrors(['title', 'content']);
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_title_max_length()
     {
         // Créer un titre trop long

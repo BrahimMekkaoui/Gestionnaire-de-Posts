@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="C:\Users\DELL\Gestionnaire de Posts\phpunit.xml" tests="11" assertions="27" errors="0" failures="0" skipped="0" time="1.476152">
+    <testsuite name="Unit" tests="3" assertions="6" errors="0" failures="0" skipped="0" time="0.469390">
+      <testsuite name="Tests\Unit\ExampleTest" file="C:\Users\DELL\Gestionnaire de Posts\tests\Unit\ExampleTest.php" tests="1" assertions="1" errors="0" failures="0" skipped="0" time="0.009859">
+        <testcase name="test_that_true_is_true" file="C:\Users\DELL\Gestionnaire de Posts\tests\Unit\ExampleTest.php" line="12" class="Tests\Unit\ExampleTest" classname="Tests.Unit.ExampleTest" assertions="1" time="0.009859"/>
+      </testsuite>
+      <testsuite name="Tests\Unit\PostTest" file="C:\Users\DELL\Gestionnaire de Posts\tests\Unit\PostTest.php" tests="2" assertions="5" errors="0" failures="0" skipped="0" time="0.459531">
+        <testcase name="it_can_create_a_post" file="C:\Users\DELL\Gestionnaire de Posts\tests\Unit\PostTest.php" line="14" class="Tests\Unit\PostTest" classname="Tests.Unit.PostTest" assertions="4" time="0.418401"/>
+        <testcase name="it_requires_title_and_content" file="C:\Users\DELL\Gestionnaire de Posts\tests\Unit\PostTest.php" line="36" class="Tests\Unit\PostTest" classname="Tests.Unit.PostTest" assertions="1" time="0.041130"/>
+      </testsuite>
+    </testsuite>
+    <testsuite name="Feature" tests="8" assertions="21" errors="0" failures="0" skipped="0" time="1.006762">
+      <testsuite name="Tests\Feature\ExampleTest" file="C:\Users\DELL\Gestionnaire de Posts\tests\Feature\ExampleTest.php" tests="1" assertions="2" errors="0" failures="0" skipped="0" time="0.233846">
+        <testcase name="test_the_application_returns_a_successful_response" file="C:\Users\DELL\Gestionnaire de Posts\tests\Feature\ExampleTest.php" line="13" class="Tests\Feature\ExampleTest" classname="Tests.Feature.ExampleTest" assertions="2" time="0.233846"/>
+      </testsuite>
+      <testsuite name="Tests\Feature\PostTest" file="C:\Users\DELL\Gestionnaire de Posts\tests\Feature\PostTest.php" tests="7" assertions="19" errors="0" failures="0" skipped="0" time="0.772916">
+        <testcase name="it_can_display_all_posts" file="C:\Users\DELL\Gestionnaire de Posts\tests\Feature\PostTest.php" line="14" class="Tests\Feature\PostTest" classname="Tests.Feature.PostTest" assertions="2" time="0.460107"/>
+        <testcase name="it_can_create_a_post" file="C:\Users\DELL\Gestionnaire de Posts\tests\Feature\PostTest.php" line="28" class="Tests\Feature\PostTest" classname="Tests.Feature.PostTest" assertions="3" time="0.069024"/>
+        <testcase name="it_can_show_a_post" file="C:\Users\DELL\Gestionnaire de Posts\tests\Feature\PostTest.php" line="47" class="Tests\Feature\PostTest" classname="Tests.Feature.PostTest" assertions="3" time="0.125430"/>
+        <testcase name="it_can_update_a_post" file="C:\Users\DELL\Gestionnaire de Posts\tests\Feature\PostTest.php" line="62" class="Tests\Feature\PostTest" classname="Tests.Feature.PostTest" assertions="3" time="0.027275"/>
+        <testcase name="it_can_delete_a_post" file="C:\Users\DELL\Gestionnaire de Posts\tests\Feature\PostTest.php" line="85" class="Tests\Feature\PostTest" classname="Tests.Feature.PostTest" assertions="3" time="0.038737"/>
+        <testcase name="it_validates_required_fields" file="C:\Users\DELL\Gestionnaire de Posts\tests\Feature\PostTest.php" line="103" class="Tests\Feature\PostTest" classname="Tests.Feature.PostTest" assertions="3" time="0.032890"/>
+        <testcase name="it_validates_title_max_length" file="C:\Users\DELL\Gestionnaire de Posts\tests\Feature\PostTest.php" line="113" class="Tests\Feature\PostTest" classname="Tests.Feature.PostTest" assertions="2" time="0.019454"/>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>

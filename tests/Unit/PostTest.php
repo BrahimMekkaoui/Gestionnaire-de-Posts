@@ -4,13 +4,14 @@ namespace Tests\Unit;
 
 use App\Models\Post;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class PostTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_can_create_a_post()
     {
         // Arrange
@@ -32,7 +33,7 @@ class PostTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_requires_title_and_content()
     {
         $this->expectException('Illuminate\\Database\\QueryException');
