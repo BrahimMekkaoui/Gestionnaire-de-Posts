@@ -30,9 +30,9 @@ jobs:
         with:
           path: |
             ~/.composer/cache/files
-          key: ${{ runner.os }}-composer-v3-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-composer-v4-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
-            ${{ runner.os }}-composer-v3-
+            ${{ runner.os }}-composer-v4-
 
       - name: Install Dependencies
         run: |
