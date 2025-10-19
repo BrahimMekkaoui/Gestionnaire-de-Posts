@@ -72,7 +72,7 @@ jobs:
         run: npm run build
 
       - name: Execute tests (with coverage artifacts)
-        run: composer test
+        run: composer test:coverage
 
       - name: Upload coverage report
         if: always()

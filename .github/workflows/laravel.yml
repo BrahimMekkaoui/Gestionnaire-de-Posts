@@ -86,7 +86,7 @@ jobs:
       run: |
         php artisan config:clear
         php artisan migrate:fresh --seed --force
-        composer test
+        composer test:coverage
 
     - name: Upload coverage report
       if: always()
