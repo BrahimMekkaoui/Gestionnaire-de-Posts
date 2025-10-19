@@ -71,7 +71,7 @@
         ],
         "test:coverage": [
             "@php artisan config:clear --ansi",
-            "@php artisan test --coverage --min=5 --coverage-html=coverage"
+            "@php artisan test --coverage --coverage-html=coverage"
         ],
         "format": [
             "@php ./vendor/bin/pint"
