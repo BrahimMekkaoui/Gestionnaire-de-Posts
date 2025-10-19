@@ -30,7 +30,7 @@ jobs:
       with:
         php-version: '8.2'
         extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_mysql, pdo_sqlite, bcmath, ctype, fileinfo, json, tokenizer, xml, intl
-        coverage: none
+        coverage: pcov
 
     - name: PHP diagnostics
       run: |
