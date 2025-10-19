@@ -70,7 +70,7 @@ jobs:
       run: npm ci
     
     - name: Lint frontend (ESLint)
-      run: npx eslint -c .eslintrc.cjs --ext .js,.vue resources/js
+      run: npm run lint
 
     - name: Build assets
       run: npm run build
