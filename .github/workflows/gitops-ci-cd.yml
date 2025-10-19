@@ -133,16 +133,16 @@ jobs:
                 
           # Set up environment
           cd deploy
-          if [ -f .env ]; then cp .env .env.production; else cp ../.env.example .env.production; fi
-          sed -i 's/APP_ENV=local/APP_ENV=production/' .env.production
-          sed -i 's/APP_DEBUG=true/APP_DEBUG=false/' .env.production
+          cp ../.env.example .env
+          sed -i 's/APP_ENV=local/APP_ENV=production/' .env
+          sed -i 's/APP_DEBUG=true/APP_DEBUG=false/' .env
           
           # Set up storage and cache directories
           mkdir -p storage/framework/{sessions,views,cache}
           chmod -R 777 storage bootstrap/cache
           
           # Generate application key
-          php artisan key:generate --force
+          php artisan key:generate --force --env=production
           
           # Optimize the application
           php artisan config:cache
