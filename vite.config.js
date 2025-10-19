@@ -13,7 +13,8 @@ export default defineConfig({
     },
     build: {
         outDir: 'public/build',
-        manifest: true,
+        // Emit manifest at legacy location to satisfy Laravel's default lookup (public/build/manifest.json)
+        manifest: 'manifest.json',
     },
 
     plugins: [
