@@ -1,13 +1,11 @@
-name: Laravel CI/CD
+name: Laravel Tests (MySQL)
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
     branches: [ main ]
 
 jobs:
-  laravel-tests:
+  mysql-tests:
     runs-on: ubuntu-latest
     
     services:
@@ -29,53 +27,22 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: '8.2'
-        extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_mysql, pdo_sqlite, bcmath, ctype, fileinfo, json, tokenizer, xml, intl
-        coverage: pcov
-
-    - name: PHP diagnostics
-      run: |
-        php -v
-        php -m | sort
+        extensions: dom, curl, libxml, mbstring, zip, pdo, pdo_mysql, bcmath, ctype, fileinfo, json, tokenizer, xml, intl
 
     - name: Cache Composer dependencies
       uses: actions/cache@v4
       with:
-        path: |
-          ~/.composer/cache/files
+        path: ~/.composer/cache/files
         key: ${{ runner.os }}-composer-v4-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-composer-v4-
+        restore-keys: ${{ runner.os }}-composer-v4-
 
     - name: Install Dependencies
       run: |
-        composer --version
-        composer diagnose || true
-        composer check-platform-reqs || true
-        composer install -q --no-ansi --no-interaction --no-progress --prefer-dist || \
-          (composer install --no-interaction --prefer-dist -vvv)
+        composer install -q --no-ansi --no-interaction --no-progress --prefer-dist
         cp .env.example .env
         php artisan key:generate
 
-    - name: Run Pint (dry-run)
-      run: |
-        vendor/bin/pint -v --test
-
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20.x'
-        cache: 'npm'
-    
-    - name: Install NPM dependencies
-      run: npm ci
-    
-    - name: Lint frontend (ESLint)
-      run: npm run lint
-
-    - name: Build assets
-      run: npm run build
-    
-    - name: Execute tests
+    - name: Execute tests with MySQL
       env:
         DB_CONNECTION: mysql
         DB_DATABASE: test_db
@@ -84,22 +51,5 @@ jobs:
         DB_HOST: 127.0.0.1
         DB_PORT: 3306
       run: |
-        php artisan config:clear
         php artisan migrate:fresh --seed --force
-        composer test:coverage
-
-    - name: Upload coverage report
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: phpunit-coverage
-        path: coverage
-        if-no-files-found: ignore
-
-    - name: Upload JUnit report
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: phpunit-junit
-        path: junit.xml
-        if-no-files-found: ignore
+        composer test
