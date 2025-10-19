@@ -53,6 +53,7 @@ jobs:
         composer check-platform-reqs || true
         composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist || \
           (composer install --no-interaction --prefer-dist -vvv)
+        composer dump-autoload
         cp .env.example .env
         php artisan key:generate
 
