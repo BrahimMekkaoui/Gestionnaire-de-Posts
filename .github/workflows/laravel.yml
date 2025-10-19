@@ -134,12 +134,13 @@ jobs:
         cache: 'npm'
     
     - name: Install NPM dependencies
-      run: npm ci --production
+      run: npm ci
     
     - name: Build assets
       run: npm run build
     
     - name: Deploy via composite action
+      if: ${{ secrets.SSH_CONFIG != '' }}
       uses: ./.github/actions/deploy
       with:
         ssh_config: ${{ secrets.SSH_CONFIG }}
