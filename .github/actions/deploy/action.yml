@@ -1,0 +1,63 @@
+name: "Deploy via SSH"
+description: "Composite action to deploy artifacts to a remote server using a single SSH_CONFIG secret"
+author: "Brahim Mekkaoui"
+
+inputs:
+  ssh_config:
+    description: |
+      A single multi-line secret that exports required env vars when appended to $GITHUB_ENV.
+      Expected content:
+        SSH_HOST=example.com
+        SSH_USERNAME=deployer
+        SSH_PRIVATE_KEY=-----BEGIN OPENSSH PRIVATE KEY-----\n...\n-----END OPENSSH PRIVATE KEY-----
+    required: true
+  source:
+    description: "Files or globs to copy to the remote server"
+    required: true
+    default: "*"
+  target:
+    description: "Remote target path"
+    required: true
+    default: "/var/www/gestionnaire-posts"
+  script:
+    description: "Shell script to execute on the remote host after upload"
+    required: false
+    default: |
+      cd /var/www/gestionnaire-posts
+      php artisan config:cache
+      php artisan route:cache
+      php artisan view:cache
+      php artisan migrate --force
+      php artisan storage:link
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set deployment env
+      shell: bash
+      run: |
+        echo "${{ inputs.ssh_config }}" >> "$GITHUB_ENV"
+
+    - name: Add host to known_hosts
+      shell: bash
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts
+
+    - name: Upload to server
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ env.SSH_HOST }}
+        username: ${{ env.SSH_USERNAME }}
+        key: ${{ env.SSH_PRIVATE_KEY }}
+        source: ${{ inputs.source }}
+        target: ${{ inputs.target }}
+        strip_components: 1
+
+    - name: Run deployment script
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ env.SSH_HOST }}
+        username: ${{ env.SSH_USERNAME }}
+        key: ${{ env.SSH_PRIVATE_KEY }}
+        script: ${{ inputs.script }}
