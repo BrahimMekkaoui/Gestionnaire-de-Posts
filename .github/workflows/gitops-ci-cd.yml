@@ -42,9 +42,8 @@ jobs:
           composer diagnose || true
           composer check-platform-reqs || true
           # Try quiet first; if it fails, run verbose to expose errors
-          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist || \
+          composer install -q --no-ansi --no-interaction --no-progress --prefer-dist || \
             (composer install --no-interaction --prefer-dist -vvv)
-          composer dump-autoload
           cp .env.example .env
           php artisan key:generate
 
@@ -112,7 +111,7 @@ jobs:
           composer about --gpg-keys || true
           composer diagnose || true
           composer check-platform-reqs || true
-          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --no-dev --optimize-autoloader || \
+          composer install -q --no-ansi --no-interaction --no-progress --prefer-dist --no-dev --optimize-autoloader || \
             (composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader -vvv)
           
           # Create deploy directory
